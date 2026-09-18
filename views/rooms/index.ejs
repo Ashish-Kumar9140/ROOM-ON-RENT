@@ -1,11 +1,258 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room On Rent</title>
-</head>
-<body>
-    <h1>ROOM ON RENT</h1>
-</body>
-</html>
+<% layout("layouts/boilerplate") %>
+
+    <div class="min-h-screen bg-gray-50">
+
+        <!-- ================= HERO SECTION ================= -->
+        <section class="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-700">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+
+                <div class="max-w-3xl mx-auto text-center text-blue">
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+                        Find Your Perfect Room
+                    </h1>
+
+                    <p class="mt-4 text-base sm:text-lg text-blue-100">
+                        Find affordable and comfortable rooms near your college,
+                        coaching centre or workplace.
+                    </p>
+                </div>
+
+                <!-- Search Box -->
+                <div class="max-w-5xl mx-auto mt-8">
+                    <form action="/listings" method="GET" class="bg-white rounded-2xl shadow-xl p-3 sm:p-4">
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+
+                            <!-- Location -->
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-semibold text-gray-500 mb-1 px-1">
+                                    LOCATION
+                                </label>
+
+                                <div class="flex items-center border border-gray-200 rounded-xl px-3">
+                                    <i class="fa-solid fa-location-dot text-gray-400 mr-2"></i>
+
+                                    <input type="text" name="location" placeholder="Search city or area"
+                                        class="w-full py-3 outline-none text-gray-700">
+                                </div>
+                            </div>
+
+                            <!-- Rent -->
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-500 mb-1 px-1">
+                                    MAX RENT
+                                </label>
+
+                                <select name="maxRent"
+                                    class="w-full border border-gray-200 rounded-xl px-3 py-3 outline-none text-gray-700 bg-white">
+                                    <option value="">Any Rent</option>
+                                    <option value="5000">₹5,000</option>
+                                    <option value="7000">₹7,000</option>
+                                    <option value="10000">₹10,000</option>
+                                    <option value="15000">₹15,000</option>
+                                    <option value="20000">₹20,000</option>
+                                </select>
+                            </div>
+
+                            <!-- Search Button -->
+                            <div class="flex items-end">
+                                <button type="submit"
+                                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition duration-200">
+                                    <i class="fa-solid fa-magnifying-glass mr-2"></i>
+                                    Search Rooms
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-7">
+
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
+                        Available Rooms
+                    </h2>
+
+                    <p class="text-gray-500 mt-1">
+                        Find a room that fits your needs and budget.
+                    </p>
+                </div>
+
+                <!-- Sort -->
+                <div>
+                    <select
+                        class="border border-gray-300 rounded-lg px-4 py-2.5 bg-white text-sm text-gray-700 outline-none">
+                        <option>Newest First</option>
+                        <option>Rent: Low to High</option>
+                        <option>Rent: High to Low</option>
+                    </select>
+                </div>
+
+            </div>
+
+
+            <!-- ================= ROOM CARDS ================= -->
+
+            <% if (rooms && rooms.length> 0) { %>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+                    <% rooms.forEach(room=> { %>
+
+                        <a href="/listings/<%= room._id %>"
+                            class="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-xl transition duration-300">
+
+                            <!-- Image -->
+                            <div class="relative h-56 overflow-hidden bg-gray-100">
+
+                                <img src="<%= room.photos && room.photos.length
+                                    ? room.photos[0]
+                                    : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80'
+                                %>" alt="<%= room.title %>"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+
+                                <!-- Available Badge -->
+                                <div class="absolute top-3 left-3">
+                                    <span
+                                        class="bg-green-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full">
+                                        Available
+                                    </span>
+                                </div>
+
+                                <!-- Wishlist -->
+                                <button type="button" onclick="event.preventDefault()"
+                                    class="absolute top-3 right-3 w-9 h-9 bg-white/90 hover:bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition">
+                                    <i class="fa-regular fa-heart"></i>
+                                </button>
+
+                            </div>
+
+
+                            <!-- Card Content -->
+                            <div class="p-4">
+
+                                <!-- Title -->
+                                <h3 class="font-semibold text-lg text-gray-900 truncate">
+                                    <%= room.title %>
+                                </h3>
+
+                                <!-- Location -->
+                                <p class="text-sm text-gray-500 mt-1 flex items-center">
+                                    <i class="fa-solid fa-location-dot mr-1.5 text-gray-400"></i>
+
+                                    <%= room.location %>, <%= room.city %>
+                                </p>
+
+
+                                <!-- Room Info -->
+                                <div class="flex flex-wrap gap-2 mt-3">
+
+                                    <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-md">
+                                        <i class="fa-solid fa-bed mr-1"></i>
+                                        <%= room.roomType %>
+                                    </span>
+
+                                    <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-md">
+                                        <i class="fa-solid fa-chair mr-1"></i>
+                                        <%= room.furnishing %>
+                                    </span>
+
+                                </div>
+
+
+                                <!-- Bottom -->
+                                <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+
+                                    <div>
+                                        <span class="text-xl font-bold text-gray-900">
+                                            ₹<%= room.rent %>
+                                        </span>
+
+                                        <span class="text-xs text-gray-500">
+                                            /month
+                                        </span>
+                                    </div>
+
+                                    <span class="text-sm font-medium text-indigo-600 group-hover:underline">
+                                        View Details
+                                        <i class="fa-solid fa-arrow-right ml-1"></i>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                        <% }) %>
+
+                </div>
+
+
+                <% } else { %>
+
+                    <!-- Empty State -->
+                    <div class="text-center py-20">
+
+                        <div class="w-20 h-20 mx-auto bg-indigo-50 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-house text-3xl text-indigo-500"></i>
+                        </div>
+
+                        <h3 class="text-xl font-semibold text-gray-900 mt-5">
+                            No rooms available
+                        </h3>
+
+                        <p class="text-gray-500 mt-2">
+                            We couldn't find any rooms right now.
+                        </p>
+
+                        <a href="/listings/new"
+                            class="inline-block mt-5 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition">
+                            List Your Room
+                        </a>
+
+                    </div>
+
+                    <% } %>
+
+
+        </main>
+
+
+        <!-- ================= OWNER CTA ================= -->
+
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+
+            <div
+                class="bg-gray-900 rounded-2xl p-7 sm:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+                <div>
+                    <h2 class="text-2xl font-bold text-blue-100">
+                        Have a room to rent?
+                    </h2>
+
+                    <p class="text-gray-400 mt-2">
+                        List your room and find the right tenant easily.
+                    </p>
+                </div>
+
+                <a href="/listings/new"
+                    class="inline-flex items-center justify-center bg-white hover:bg-gray-100 text-gray-900 font-semibold px-6 py-3 rounded-xl transition">
+                    <i class="fa-solid fa-plus mr-2"></i>
+                    List Your Room
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>

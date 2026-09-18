@@ -136,11 +136,11 @@ const roomSchema = new mongoose.Schema(
         // OWNER
         // =========================
 
-        // owner: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "User",
-        //     required: true,
-        // },
+        owner: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            // required: true,
+        },
 
         // =========================
         // LISTING STATUS
